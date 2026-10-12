@@ -14,87 +14,95 @@
           <span class="brand-mark" aria-hidden="true">R</span>
           <span>resume<span class="brand-light">agent</span></span>
         </a>
-        <span class="local-pill"><span></span> LOCAL</span>
+        <div class="top-actions"><span class="local-pill"><span></span> LOCAL</span><button class="text-button danger-text" id="delete-all" type="button">Delete all data</button></div>
       </header>
 
       <section class="intro" id="top">
-        <p class="eyebrow">TEMPLATE SETUP <span>01 / 04</span></p>
-        <h1>Start with your<br><em>LaTeX template.</em></h1>
-        <p class="lede">We’ll map its structure before building anything on top of it. Your original file stays untouched.</p>
+        <p class="eyebrow">PROFILE SETUP <span>02 / 04</span></p>
+        <h1>Build your<br><em>evidence library.</em></h1>
+        <p class="lede">Keep original sources, extracted facts, and facts you confirm in separate layers. Nothing becomes verified until you say so.</p>
       </section>
 
-      <section class="import-card" aria-labelledby="import-title">
-        <div class="card-heading">
-          <div class="step-icon" aria-hidden="true">01</div>
-          <div>
-            <h2 id="import-title">Import source</h2>
-            <p>Choose a <code>.tex</code> file from your device</p>
-          </div>
+      <nav class="tabs" aria-label="Profile setup">
+        <button class="tab active" type="button" data-view="template-view" aria-current="page">Template</button>
+        <button class="tab" type="button" data-view="profile-view">Profile <span class="tab-count" id="pending-count">0</span></button>
+        <button class="tab" type="button" data-view="sources-view">Sources <span class="tab-count" id="source-count">0</span></button>
+      </nav>
+
+      <p class="status-message" id="status-message" role="status" hidden></p>
+
+      <section class="view" id="template-view" aria-labelledby="template-title">
+        <div class="view-heading">
+          <div><p class="eyebrow">01 · ORIGINAL PROJECT</p><h2 id="template-title">Your LaTeX template</h2></div>
+          <span class="local-tag">SAVED ON THIS DEVICE</span>
         </div>
-        <label class="dropzone" id="dropzone" for="template-file" tabindex="0">
+        <p class="section-copy">Import a standalone <code>.tex</code> file or a ZIP containing its dependencies. We preserve the original bytes and read a working copy for review.</p>
+
+        <label class="dropzone" id="template-dropzone" for="template-file" tabindex="0">
           <span class="upload-icon" aria-hidden="true">↑</span>
-          <span class="drop-title">Drop your file here</span>
+          <span class="drop-title">Drop a template here</span>
           <span class="drop-caption">or <span class="browse">browse files</span></span>
-          <span class="file-types">TEX SOURCE <i>·</i> READ LOCALLY</span>
+          <span class="file-types">TEX OR ZIP <i>·</i> STORED LOCALLY</span>
         </label>
-        <input id="template-file" type="file" accept=".tex,text/plain">
-        <p class="privacy-note"><span aria-hidden="true">◉</span> This prototype reads the file in this panel only. It is not uploaded or saved.</p>
-        <p class="error" id="error" role="alert" hidden></p>
-      </section>
+        <input id="template-file" type="file" accept=".tex,.zip,application/zip,text/plain">
 
-      <section class="results" id="results" hidden aria-live="polite">
-        <div class="result-heading">
-          <div>
-            <p class="eyebrow">SOURCE REVIEW</p>
-            <h2>Your template map</h2>
-          </div>
-          <span class="ready"><span></span> READY</span>
+        <div class="zip-choice" id="zip-choice" hidden>
+          <label for="main-tex-select">Choose the main <code>.tex</code> file</label>
+          <div class="inline-form"><select id="main-tex-select"></select><button class="button primary" id="import-zip" type="button">Import project</button></div>
+          <p class="hint">All ZIP contents stay inside the original archive. No paths are extracted onto disk.</p>
         </div>
 
-        <div class="file-row">
-          <span class="file-icon" aria-hidden="true">TEX</span>
-          <div class="file-meta"><strong id="file-name"></strong><span id="file-size"></span></div>
-          <span class="check" aria-label="Loaded">✓</span>
-        </div>
-
-        <div class="stat-grid">
-          <div class="stat"><strong id="section-count">0</strong><span>SECTIONS</span></div>
-          <div class="stat"><strong id="package-count">0</strong><span>PACKAGES</span></div>
-          <div class="stat"><strong id="dependency-count">0</strong><span>EXTRA FILES</span></div>
-        </div>
-
-        <div class="list-block">
-          <div class="list-title"><h3>Document sections</h3><span>IN SOURCE ORDER</span></div>
-          <ol class="section-list" id="section-list"></ol>
-          <p class="empty-state" id="sections-empty" hidden>No <code>\section</code> commands found in this file.</p>
-        </div>
-
-        <details class="details-block">
-          <summary><span>Packages and file references</span><span class="chevron" aria-hidden="true">⌄</span></summary>
-          <div class="details-content">
-            <h4>Packages</h4>
-            <ul id="package-list" class="tag-list"></ul>
-            <p class="empty-state" id="packages-empty" hidden>No <code>\usepackage</code> commands found.</p>
-            <h4>External files</h4>
-            <ul id="dependency-list" class="dependency-list"></ul>
-            <p class="empty-state" id="dependencies-empty" hidden>No <code>\input</code>, <code>\include</code>, or image references found.</p>
-          </div>
-        </details>
-
-        <details class="source-block">
-          <summary><span>View source text</span><span class="chevron" aria-hidden="true">⌄</span></summary>
-          <pre id="source-preview"></pre>
-        </details>
-
-        <div class="next-note">
-          <span class="next-icon" aria-hidden="true">⌁</span>
-          <div><strong>Next: local compile</strong><p>PDF preview becomes available after a local TeX engine is configured.</p></div>
-          <span class="pending">NEXT</span>
+        <div class="template-list-wrap">
+          <div class="list-title"><h3>Saved templates</h3><span id="template-count-label">0 PROJECTS</span></div>
+          <div class="template-list" id="template-list"></div>
+          <p class="empty-state" id="templates-empty">No template saved yet. Your original upload stays unchanged.</p>
         </div>
       </section>
 
-      <footer><span>PERSONAL WORKSPACE</span><span>BUILT FOR YOUR LOCAL MACHINE</span></footer>
+      <section class="view" id="profile-view" aria-labelledby="profile-title" hidden>
+        <div class="view-heading">
+          <div><p class="eyebrow">02 · FACT REVIEW</p><h2 id="profile-title">Your profile facts</h2></div>
+          <span class="review-count" id="review-summary">0 to review</span>
+        </div>
+        <p class="section-copy">Extracted statements are candidates, not verified profile facts. Confirm only statements you can stand behind; each keeps a link to its source.</p>
+
+        <div class="subheading"><h3>Needs your review</h3><span id="unverified-label">0 CANDIDATES</span></div>
+        <div class="fact-list" id="pending-facts"></div>
+        <p class="empty-state" id="pending-empty">No facts waiting for review. Import a resume or add a source to get started.</p>
+
+        <div class="subheading verified-heading"><h3>Verified profile</h3><span id="verified-label">0 CONFIRMED</span></div>
+        <div class="fact-list" id="verified-facts"></div>
+        <p class="empty-state" id="verified-empty">Facts you confirm will appear here.</p>
+
+        <details class="manual-fact">
+          <summary>Add a fact you confirm yourself <span class="chevron" aria-hidden="true">⌄</span></summary>
+          <label for="manual-fact-text">Profile statement</label>
+          <textarea id="manual-fact-text" rows="3" maxlength="1200" placeholder="Add a skill, project detail, date, or other fact you can confirm."></textarea>
+          <button class="button primary" id="add-manual-fact" type="button">Add as verified</button>
+        </details>
+      </section>
+
+      <section class="view" id="sources-view" aria-labelledby="sources-title" hidden>
+        <div class="view-heading">
+          <div><p class="eyebrow">03 · SOURCE LIBRARY</p><h2 id="sources-title">Career materials</h2></div>
+          <span class="local-tag">PRIVATE TO THIS CHROME PROFILE</span>
+        </div>
+        <p class="section-copy">Keep resumes, notes, and supporting documents with their import status. Text, DOCX, and selectable PDF text are parsed locally. Scanned PDFs can be stored and reviewed with pasted text.</p>
+
+        <label class="dropzone source-dropzone" id="source-dropzone" for="source-file" tabindex="0">
+          <span class="upload-icon" aria-hidden="true">+</span>
+          <span class="drop-title">Add a source document</span>
+          <span class="drop-caption">PDF, DOCX, TXT, Markdown, or LaTeX</span>
+          <span class="file-types">MAX 25 MB <i>·</i> STORED LOCALLY</span>
+        </label>
+        <input id="source-file" type="file" accept=".pdf,.docx,.txt,.md,.tex,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain,text/markdown">
+
+        <div class="source-list" id="source-list"></div>
+        <p class="empty-state" id="sources-empty">No career materials added yet.</p>
+      </section>
+
+      <footer><span>LOCAL PROFILE</span><span>YOUR SOURCES STAY ON THIS DEVICE</span></footer>
     </main>
-    <script src="sidepanel.js"></script>
+    <script type="module" src="sidepanel.js"></script>
   </body>
 </html>

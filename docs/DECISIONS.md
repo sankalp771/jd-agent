@@ -102,8 +102,16 @@ Durable product choices live here. Each item records the current decision, why i
 
 ## D-017 — Initial local runtime architecture
 
-- **Status:** Recommended; first template compile validated on Windows
-- **Decision:** Use a Manifest V3 Chrome side panel with a TypeScript/React UI and a Windows native messaging host for local operations. Keep profile and job data local, with SQLite metadata and application-managed files under the user's local application data directory.
+- **Status:** Partly superseded by D-018; native host remains a recommendation for rendering
+- **Decision:** Use a Manifest V3 Chrome side panel and a Windows native messaging host for trusted local rendering operations.
 - **Decision:** Use MiKTeX for the initial Windows development path. Compile only a working copy of the imported LaTeX project, with shell escape disabled and bounded process resources. Retain the original template unchanged.
-- **Reason:** A native messaging pipe avoids exposing a local HTTP service, and a local host can own filesystem access, provider credentials, and rendering.
+- **Reason:** A native messaging pipe avoids exposing a local HTTP service, and a local host can own TeX process management.
 - **Validation needed:** Windows installation/update flow and the strength of available process/filesystem isolation. The supplied template compiled successfully with MiKTeX 25.12; the template emits a non-fatal `fancyhdr` footskip warning.
+
+## D-018 — Extension-local Phase 1 persistence
+
+- **Status:** Decided for the personal MVP's profile/source slice
+- **Decision:** Use IndexedDB scoped to the Chrome extension origin for source metadata, original file blobs, templates, extracted candidates, and verified facts. Keep original file blobs in a separate object store. No source/profile content leaves the extension during import or review.
+- **Decision:** Parse `.tex`, `.txt`, `.md`, DOCX document text, and selectable PDF text locally. Bundle PDF.js and cap PDF extraction at 100 pages and 2 MB of text. Scanned PDFs can be stored and use pasted text; OCR is out of scope. ZIP projects remain intact as an original archive; inspect the main `.tex` entry without extracting paths to disk.
+- **Reason:** This delivers durable, device-local profile review without requiring the native-host installer before the local rendering phase.
+- **Boundary:** Native host remains required for extension-controlled TeX compilation and process isolation. Revisit IndexedDB only if Phase 4 needs cross-process structured storage.

@@ -18,3 +18,13 @@ Append concise, dated entries for meaningful project changes. Keep implementatio
 - Added a Chrome side-panel prototype that reads a selected `.tex` file in memory and shows its document sections, packages, file references, and source text.
 - Installed MiKTeX 25.12 per-user and compiled an unchanged working copy of the `.tex` with shell escape disabled. The render is one page and visually inspected; MiKTeX reports a non-fatal zero-footskip warning from `fancyhdr`.
 - Marked Phase 0 complete. Next: add immutable local template storage and connect the extension to the local renderer.
+
+## 2026-10-13 — Phase 1 evidence library started
+
+- Replaced the in-memory template preview with extension-local IndexedDB storage for immutable source file blobs, templates, candidate facts, and verified profile facts.
+- Added `.tex`/ZIP template import, main-file selection, local section/package maps, and candidate extraction from resume bullets with source/line provenance.
+- Added PDF/DOCX/TXT/Markdown/TeX source imports. Plain text and DOCX are parsed locally; PDF originals are stored and pasted selectable text can produce review candidates.
+- Added confirm/reject/edit actions, source retention for verified facts, original-file downloads, and delete-all.
+- Bundled PDF.js 5.6.205 and added local selectable-text extraction with page and text-size limits; scanned PDFs retain the paste-text fallback.
+- Updated D-018 and architecture: SQLite/native host deferred until the extension needs local rendering or cross-process access.
+- Next: refine fact/profile editing and make document extraction more automatic without weakening provenance controls.

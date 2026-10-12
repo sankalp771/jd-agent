@@ -4,6 +4,8 @@ This is a sequence of outcomes, not a promise of dates. Keep the MVP narrow enou
 
 **Phase 0 status:** Complete (2026-10-13). The initial architecture and fixture are recorded, the `.tex` template compiles with MiKTeX on Windows, and the first Chrome template-review screen is available in `extension/`.
 
+**Phase 1 status:** In progress (2026-10-13). The extension has local storage, template/source import, and evidence review. Text, DOCX, and selectable PDF text are extracted locally; see `docs/ARCHITECTURE.md` for limits.
+
 ## Phase 0 — Foundation and discovery
 
 - Inspect the user's LaTeX template and supporting assets.

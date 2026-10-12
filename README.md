@@ -2,7 +2,7 @@
 
 Resume Agent is a local-first tool for turning a job description and a person's verified career evidence into a relevant, truthful, ATS-readable resume. The initial product is a Chrome extension for Windows with a side panel and a local document-rendering service.
 
-> **Project status:** Phase 0 complete. The Chrome template-import prototype and local LaTeX compile path are in place. Local persistence, native messaging, and profile workflows remain to be implemented.
+> **Project status:** Phase 0 complete; Phase 1 in progress. The Chrome extension stores templates and source files locally, and extracts profile candidates from text, DOCX, and selectable PDF text for review. Native rendering integration remains future work.
 
 ## Product promise
 
@@ -45,7 +45,7 @@ See [the product brief](docs/PRODUCT_BRIEF.md) for full requirements, future sco
 
 ## Getting started
 
-The first prototype is in `extension/`. Load that folder as an unpacked extension in Chrome to inspect a `.tex` file locally. The supplied `.tex` also compiles with MiKTeX on Windows. Next, add immutable local template storage and connect the extension to the local renderer.
+The extension is in `extension/`. Load that folder as an unpacked extension in Chrome to import a `.tex` template or ZIP project, review candidate facts, and manage local sources. The supplied `.tex` compiles with MiKTeX on Windows. See [the extension guide](extension/README.md) for details.
 
 ## Documentation updates
 

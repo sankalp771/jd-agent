@@ -1,37 +1,39 @@
 # Initial Architecture
 
-**Status:** Recommended implementation plan, 2026-10-13. These choices can change as the personal MVP is exercised.
+**Status:** Phase 1 implementation plan, 2026-10-13. These choices can change as the personal MVP is exercised.
 
 ## Runtime shape
 
-- **Chrome extension:** Manifest V3 side panel, built with TypeScript and React. It owns the user-facing workflow and only reads a page after a user action.
-- **Local companion:** A Windows native messaging host launched by Chrome. The extension sends structured requests over the native messaging pipe; the host performs local file, database, provider, and rendering operations. This avoids exposing a long-running unauthenticated localhost service.
-- **Local data:** SQLite metadata under `%LOCALAPPDATA%\ResumeAgent`, with source files and generated artifacts stored alongside it in application-managed directories. Database records distinguish source documents, extracted candidate facts, verified profile facts, and per-application work.
-- **Rendering:** Compile a copied project in a unique temporary directory using a locally installed TeX engine, with shell escape disabled. Keep the imported template immutable. Remove temporary build files after success or failure; preserve exported versions in job history.
+- **Chrome extension:** Manifest V3 side panel using local JavaScript modules and CSS, with no build step. It owns the user-facing workflow and only reads a page after a user action.
+- **Local persistence:** IndexedDB scoped to the extension origin. Store source metadata and extracted facts separately from original file blobs. Keep source documents, pending facts, verified facts, and templates distinct. Provide a delete-all action.
+- **Local companion (later slice):** A Windows native messaging host can own trusted filesystem access and TeX process management when extension-connected compilation begins. No localhost server is exposed.
+- **Rendering:** MiKTeX 25.12 is installed per-user for development. The supplied source compiled with shell escape disabled. The extension currently does not invoke the TeX engine; add a native host before integrating compilation. Compile a working copy and keep the imported template immutable.
 - **AI provider:** Keep generation behind a local provider interface. Send data only after an explicit generation action, and apply the user's field exclusions before constructing a request.
 
-## First vertical slice
+## Vertical slices
 
-1. **Prototype now:** Select the canonical `.tex` file in the side panel. Read it in memory and show its sections, package names, external-file references, and source text for review. Do not persist or edit it.
-2. **Next:** Add durable local import with an immutable source copy and explicit dependency handling.
-3. **Then:** Create a separate working copy and compile locally, returning the PDF and compiler diagnostics to the side panel.
+1. **Phase 0 complete:** Inspect the canonical `.tex` file in the side panel and compile it locally with MiKTeX. The accompanying PDF is a visual reference from a different resume version.
+2. **Phase 1 in progress:** Store `.tex` or ZIP originals as local blobs; select the main `.tex` entry in a ZIP; extract candidate statements with source/line provenance; confirm or reject each candidate; parse DOCX and selectable PDF text locally.
+3. **Next:** Improve profile editing and extraction quality; scanned-PDF OCR remains out of scope.
+4. **Later:** Connect the extension to an isolated native compile process and return the PDF and diagnostics.
 
-The supplied `.tex` is the canonical input; the accompanying PDF is a visual reference from a different resume version. The LaTeX source has no `\\input`, `\\include`, image, or custom style-file dependencies. It uses common packages and declares `pdflatex` as its compile command. MiKTeX 25.12 was installed per-user for the Phase 0 compile. The unchanged source compiled with `pdflatex -no-shell-escape` to a one-page PDF. The render was visually inspected. MiKTeX reported the template's zero `\\footskip` as a `fancyhdr` warning; it did not prevent output.
+The supplied `.tex` has no `\\input`, `\\include`, image, or custom style-file dependencies. It compiled with `pdflatex -no-shell-escape` to a one-page PDF. The render was visually inspected. MiKTeX reported the template's zero `\\footskip` as a non-fatal `fancyhdr` warning.
 
-The first UI prototype lives in `extension/`. It handles a selected `.tex` file entirely in the side panel's memory. It does not store the file, connect to a native host, or compile it yet.
+The Phase 1 UI lives in `extension/`. It stores selected files in extension-local IndexedDB without uploading them or writing ZIP entries to disk. ZIP64/encrypted archives and files over the documented limits are rejected. DOCX document text is read locally from its ZIP/XML contents. PDF.js 5.6.205 reads selectable PDF page text locally; the bundled module, worker, and license are in `extension/vendor/pdfjs/`. Extraction is capped at 100 pages and 2 MB of text. Scanned PDFs remain stored originals and can use pasted text; OCR is not included.
 
 ## Security and correctness boundaries
 
 - Accept only explicit extension requests; no page scraping in the background.
-- Validate every file path under the application-managed data root and reject traversal or symlink escapes.
-- Treat imported files and extracted text as untrusted input.
-- Invoke the TeX engine with shell escape disabled, a controlled working directory, time and output limits, and no network access where the host can enforce it.
-- Keep original imports read-only from the application's perspective; edits and repairs happen only in a working copy and require review.
+- Keep imported original bytes unchanged. The UI reads and parses copies in memory.
+- Treat imported files and extracted text as untrusted input; display content as text, never executable markup.
+- Avoid extracting ZIP paths to disk. Enforce archive, entry-count, expansion, and TeX size limits.
+- Keep verified facts linked to their source. Block source deletion while that source supports a verified fact; delete-all removes all application-managed IndexedDB records.
+- Invoke the TeX engine only through a controlled local host with shell escape disabled, a controlled working directory, time and output limits, and no network access where the host can enforce it.
 - Store provider credentials outside extension code and Chrome sync storage.
 
 ## Open implementation checks
 
 - Package and document the MiKTeX installation/availability experience for Windows users.
 - Prototype Chrome native messaging installation and upgrade behavior.
-- Confirm whether SQLite is bundled in the local host or accessed through a small persistence module.
+- Revisit SQLite only if the local host needs shared structured data beyond the extension's IndexedDB profile store.
 - Validate process limits and filesystem isolation for TeX compilation on supported Windows editions.
