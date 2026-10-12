@@ -2,7 +2,7 @@
 
 **Status:** Working requirements, captured 2026-10-13 (Asia/Calcutta).  
 **Product name:** Resume Agent (working name).  
-**Stage:** Personal-use MVP definition; implementation not started.
+**Stage:** Personal-use MVP definition; initial template-import UI prototype in progress.
 
 ## 1. Summary
 

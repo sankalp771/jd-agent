@@ -2,6 +2,8 @@
 
 This is a sequence of outcomes, not a promise of dates. Keep the MVP narrow enough to validate the user's real application workflow, while preserving the product boundaries in the brief.
 
+**Phase 0 status:** Complete (2026-10-13). The initial architecture and fixture are recorded, the `.tex` template compiles with MiKTeX on Windows, and the first Chrome template-review screen is available in `extension/`.
+
 ## Phase 0 — Foundation and discovery
 
 - Inspect the user's LaTeX template and supporting assets.

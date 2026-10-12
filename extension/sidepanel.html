@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light">
+    <title>Resume Agent</title>
+    <link rel="stylesheet" href="sidepanel.css">
+  </head>
+  <body>
+    <main class="shell">
+      <header class="topbar">
+        <a class="brand" href="#top" aria-label="Resume Agent home">
+          <span class="brand-mark" aria-hidden="true">R</span>
+          <span>resume<span class="brand-light">agent</span></span>
+        </a>
+        <span class="local-pill"><span></span> LOCAL</span>
+      </header>
+
+      <section class="intro" id="top">
+        <p class="eyebrow">TEMPLATE SETUP <span>01 / 04</span></p>
+        <h1>Start with your<br><em>LaTeX template.</em></h1>
+        <p class="lede">We’ll map its structure before building anything on top of it. Your original file stays untouched.</p>
+      </section>
+
+      <section class="import-card" aria-labelledby="import-title">
+        <div class="card-heading">
+          <div class="step-icon" aria-hidden="true">01</div>
+          <div>
+            <h2 id="import-title">Import source</h2>
+            <p>Choose a <code>.tex</code> file from your device</p>
+          </div>
+        </div>
+        <label class="dropzone" id="dropzone" for="template-file" tabindex="0">
+          <span class="upload-icon" aria-hidden="true">↑</span>
+          <span class="drop-title">Drop your file here</span>
+          <span class="drop-caption">or <span class="browse">browse files</span></span>
+          <span class="file-types">TEX SOURCE <i>·</i> READ LOCALLY</span>
+        </label>
+        <input id="template-file" type="file" accept=".tex,text/plain">
+        <p class="privacy-note"><span aria-hidden="true">◉</span> This prototype reads the file in this panel only. It is not uploaded or saved.</p>
+        <p class="error" id="error" role="alert" hidden></p>
+      </section>
+
+      <section class="results" id="results" hidden aria-live="polite">
+        <div class="result-heading">
+          <div>
+            <p class="eyebrow">SOURCE REVIEW</p>
+            <h2>Your template map</h2>
+          </div>
+          <span class="ready"><span></span> READY</span>
+        </div>
+
+        <div class="file-row">
+          <span class="file-icon" aria-hidden="true">TEX</span>
+          <div class="file-meta"><strong id="file-name"></strong><span id="file-size"></span></div>
+          <span class="check" aria-label="Loaded">✓</span>
+        </div>
+
+        <div class="stat-grid">
+          <div class="stat"><strong id="section-count">0</strong><span>SECTIONS</span></div>
+          <div class="stat"><strong id="package-count">0</strong><span>PACKAGES</span></div>
+          <div class="stat"><strong id="dependency-count">0</strong><span>EXTRA FILES</span></div>
+        </div>
+
+        <div class="list-block">
+          <div class="list-title"><h3>Document sections</h3><span>IN SOURCE ORDER</span></div>
+          <ol class="section-list" id="section-list"></ol>
+          <p class="empty-state" id="sections-empty" hidden>No <code>\section</code> commands found in this file.</p>
+        </div>
+
+        <details class="details-block">
+          <summary><span>Packages and file references</span><span class="chevron" aria-hidden="true">⌄</span></summary>
+          <div class="details-content">
+            <h4>Packages</h4>
+            <ul id="package-list" class="tag-list"></ul>
+            <p class="empty-state" id="packages-empty" hidden>No <code>\usepackage</code> commands found.</p>
+            <h4>External files</h4>
+            <ul id="dependency-list" class="dependency-list"></ul>
+            <p class="empty-state" id="dependencies-empty" hidden>No <code>\input</code>, <code>\include</code>, or image references found.</p>
+          </div>
+        </details>
+
+        <details class="source-block">
+          <summary><span>View source text</span><span class="chevron" aria-hidden="true">⌄</span></summary>
+          <pre id="source-preview"></pre>
+        </details>
+
+        <div class="next-note">
+          <span class="next-icon" aria-hidden="true">⌁</span>
+          <div><strong>Next: local compile</strong><p>PDF preview becomes available after a local TeX engine is configured.</p></div>
+          <span class="pending">NEXT</span>
+        </div>
+      </section>
+
+      <footer><span>PERSONAL WORKSPACE</span><span>BUILT FOR YOUR LOCAL MACHINE</span></footer>
+    </main>
+    <script src="sidepanel.js"></script>
+  </body>
+</html>

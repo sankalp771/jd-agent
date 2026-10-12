@@ -1,0 +1,16 @@
+{
+  "manifest_version": 3,
+  "name": "Resume Agent",
+  "version": "0.1.0",
+  "description": "Review a LaTeX resume template locally before tailoring it.",
+  "permissions": ["sidePanel"],
+  "action": {
+    "default_title": "Open Resume Agent"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "side_panel": {
+    "default_path": "sidepanel.html"
+  }
+}

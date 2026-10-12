@@ -2,7 +2,7 @@
 
 Resume Agent is a local-first tool for turning a job description and a person's verified career evidence into a relevant, truthful, ATS-readable resume. The initial product is a Chrome extension for Windows with a side panel and a local document-rendering service.
 
-> **Project status:** documentation and product definition. Implementation has not started.
+> **Project status:** Phase 0 complete. The Chrome template-import prototype and local LaTeX compile path are in place. Local persistence, native messaging, and profile workflows remain to be implemented.
 
 ## Product promise
 
@@ -27,6 +27,7 @@ See [the product brief](docs/PRODUCT_BRIEF.md) for full requirements, future sco
 - [Product brief](docs/PRODUCT_BRIEF.md): product vision, users, workflows, scope, requirements, risks, and success measures.
 - [Decisions](docs/DECISIONS.md): durable decisions and their rationale.
 - [Roadmap](docs/ROADMAP.md): MVP milestones and deferred capabilities.
+- [Initial architecture](docs/ARCHITECTURE.md): proposed runtime, data, rendering, and security boundaries.
 - [Project log](docs/LOG.md): dated updates, changes, and progress.
 - [Maintaining project context](docs/CONTEXT_MAINTENANCE.md): how contributors keep these documents aligned.
 - [Changelog](CHANGELOG.md): user-visible changes by release.
@@ -44,7 +45,7 @@ See [the product brief](docs/PRODUCT_BRIEF.md) for full requirements, future sco
 
 ## Getting started
 
-There is no application implementation yet. The first development step is to inspect the user's LaTeX template and representative career/JD materials, then define the architecture and build a thin end-to-end vertical slice.
+The first prototype is in `extension/`. Load that folder as an unpacked extension in Chrome to inspect a `.tex` file locally. The supplied `.tex` also compiles with MiKTeX on Windows. Next, add immutable local template storage and connect the extension to the local renderer.
 
 ## Documentation updates
 

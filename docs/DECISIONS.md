@@ -99,3 +99,11 @@ Durable product choices live here. Each item records the current decision, why i
 
 - **Status:** Working choice
 - **Decision:** Use “Resume Agent” as the working name; keep the UI minimal, fast, and developer-oriented.
+
+## D-017 — Initial local runtime architecture
+
+- **Status:** Recommended; first template compile validated on Windows
+- **Decision:** Use a Manifest V3 Chrome side panel with a TypeScript/React UI and a Windows native messaging host for local operations. Keep profile and job data local, with SQLite metadata and application-managed files under the user's local application data directory.
+- **Decision:** Use MiKTeX for the initial Windows development path. Compile only a working copy of the imported LaTeX project, with shell escape disabled and bounded process resources. Retain the original template unchanged.
+- **Reason:** A native messaging pipe avoids exposing a local HTTP service, and a local host can own filesystem access, provider credentials, and rendering.
+- **Validation needed:** Windows installation/update flow and the strength of available process/filesystem isolation. The supplied template compiled successfully with MiKTeX 25.12; the template emits a non-fatal `fancyhdr` footskip warning.
